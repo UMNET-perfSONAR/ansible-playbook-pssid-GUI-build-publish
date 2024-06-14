@@ -1,0 +1,61 @@
+- name: Build and push Docker images with Docker Compose
+  hosts: localhost
+  vars:
+    # *CAVEAT: use absolute path*
+    # TODO: change docker_compose_file path as appropriate.
+    docker_compose_file: "/home/wmarcoyu/pssid-gui2/docker-compose.yml"
+    frontend_image_name: "pssid-gui2_client"
+    backend_image_name: "pssid-gui2_server"
+    database_image_name: "pssid-gui2_mongo"
+    docker_image_tag: "latest"
+    # TODO: change dockerhub_username as appropriate.
+    dockerhub_username: "wmarcoyu"
+  tasks:
+    - name: Ensure Docker Compose is installed
+      apt:
+        name: docker-compose
+        state: present
+      become: yes
+
+    - name: Build the Docker images with Docker Compose
+      command: docker-compose -f {{ docker_compose_file }} build
+      args:
+        chdir: "{{ docker_compose_file | dirname }}"
+      register: build_result
+      become: yes
+
+    - name: Tag the frontend Docker image
+      command: docker tag {{ frontend_image_name }}:latest {{ dockerhub_username }}/{{ frontend_image_name }}:{{ docker_image_tag }}
+      register: frontend_tag_result
+
+    - name: Tag the backend Docker image
+      command: docker tag {{ backend_image_name }}:latest {{ dockerhub_username }}/{{ backend_image_name }}:{{ docker_image_tag }}
+      register: backend_tag_result
+
+    - name: Tag the database Docker image
+      command: docker tag {{ database_image_name }}:latest {{ dockerhub_username }}/{{ database_image_name }}:{{ docker_image_tag }}
+      register: database_tag_result
+
+    - name: Push the frontend Docker image to Docker Hub
+      command: docker push {{ dockerhub_username }}/{{ frontend_image_name }}:{{ docker_image_tag }}
+      register: frontend_push_result
+
+    - name: Push the backend Docker image to Docker Hub
+      command: docker push {{ dockerhub_username }}/{{ backend_image_name }}:{{ docker_image_tag }}
+      register: backend_push_result
+
+    - name: Push the database Docker image to Docker Hub
+      command: docker push {{ dockerhub_username }}/{{ database_image_name }}:{{ docker_image_tag }}
+      register: database_push_result
+
+    - name: Display frontend push result
+      debug:
+        msg: "{{ frontend_push_result.stdout }}"
+
+    - name: Display backend push result
+      debug:
+        msg: "{{ backend_push_result.stdout }}"
+
+    - name: Display database push result
+      debug:
+        msg: "{{ database_push_result.stdout }}"
