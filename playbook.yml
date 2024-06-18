@@ -1,5 +1,5 @@
 - name: Build and push Docker images with Docker Compose
-  hosts: localhost
+  hosts: dev-host
   vars:
     # *CAVEAT: use absolute path*
     # TODO: change docker_compose_file path as appropriate.

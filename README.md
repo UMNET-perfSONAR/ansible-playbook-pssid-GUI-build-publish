@@ -40,5 +40,11 @@ command-line. Refer to the (quick) tutorial
 Now you can run the script as follows in the same directory as the `playbook.yml`
 file
 ```
-ansible-playbook playbook.yml --ask-become-pass
+ansible-playbook --inventory inventory/hosts.ini \
+                 --ask-become-pass playbook.yml
 ```
+
+## Running on a Separate Ansible Controller
+To run the script on an Ansible controller machine that is separate from the
+development machine, edit the `inventory/hosts.ini` file and adjust the
+`[dev-host]` entry accordingly.
