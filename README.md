@@ -29,7 +29,7 @@ ambiguous for root.
 ```
 ...
     # TODO: change dockerhub_username as appropriate.
-    dockerhub_username: "umnetworking"
+    dockerhub_username: "wmarcoyu"
   tasks:
 ...
 ```
