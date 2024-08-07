@@ -9,7 +9,7 @@
     database_image_name: "pssid-gui2_mongo"
     docker_image_tag: "latest"
     # TODO: change dockerhub_username as appropriate.
-    dockerhub_username: "wmarcoyu"
+    dockerhub_username: "umnetworking"
   tasks:
     - name: Ensure Docker Compose is installed
       apt:
